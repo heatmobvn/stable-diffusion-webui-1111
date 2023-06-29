@@ -1,5 +1,5 @@
 from modules import launch_utils
-from helper.v2a_server import post_v2a
+from helper.hm import init_server
 
 args = launch_utils.args
 python = launch_utils.python
@@ -23,18 +23,15 @@ prepare_environment = launch_utils.prepare_environment
 configure_for_tests = launch_utils.configure_for_tests
 start = launch_utils.start
 
-google_id = args.google_id
-post_v2a(google_id, "Receive request start")
 
 def main():
+    init_server()
     if not args.skip_prepare_environment:
-        post_v2a(google_id, "prepare_environment")
         prepare_environment()
 
     if args.test_server:
         configure_for_tests()
 
-    post_v2a(google_id, "start")
     start()
 
 

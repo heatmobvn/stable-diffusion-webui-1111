@@ -11,6 +11,8 @@ from omegaconf import OmegaConf
 from os import mkdir
 from urllib import request
 from helper.v2a_server import post_v2a
+from helper import hm
+from helper.hm import server_id
 import ldm.modules.midas as midas
 
 from ldm.util import instantiate_from_config
@@ -122,7 +124,13 @@ def list_models():
     else:
         model_url = "https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.safetensors"
 
-    model_list = modelloader.load_models(model_path=model_path, model_url=model_url, command_path=shared.cmd_opts.ckpt_dir, ext_filter=[".ckpt", ".safetensors"], download_name="v1-5-pruned-emaonly.safetensors", ext_blacklist=[".vae.ckpt", ".vae.safetensors"])
+    download_name = ''
+    if hm.args.group:
+        download_name, model_url = hm.get_models_info()
+        shared.cmd_opts.ckpt = os.path.join(model_path, download_name)
+        cmd_ckpt = shared.cmd_opts.ckpt
+
+    model_list = modelloader.load_models(model_path=model_path, model_url=model_url, command_path=shared.cmd_opts.ckpt_dir, ext_filter=[".ckpt", ".safetensors"], download_name=download_name, ext_blacklist=[".vae.ckpt", ".vae.safetensors"])
 
     if os.path.exists(cmd_ckpt):
         checkpoint_info = CheckpointInfo(cmd_ckpt)
@@ -509,8 +517,7 @@ def load_model(checkpoint_info=None, already_loaded_state_dict=None):
 
     print(f"Model loaded in {timer.summary()}.")
     
-    google_id = shared.cmd_opts.google_id
-    post_v2a(google_id, 'Model_loaded: ' + checkpoint_info.title)
+    post_v2a(server_id, 'Model_loaded: ' + checkpoint_info.title)
 
     return sd_model
 

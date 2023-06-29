@@ -44,7 +44,8 @@ def load_models(model_path: str, model_url: str = None, command_path: str = None
                 if full_path not in output:
                     output.append(full_path)
 
-        if model_url is not None and len(output) == 0:
+        found_model = any(download_name in e for e in output)
+        if model_url is not None and not found_model:
             if download_name is not None:
                 from basicsr.utils.download_util import load_file_from_url
                 dl = load_file_from_url(model_url, places[0], True, download_name)

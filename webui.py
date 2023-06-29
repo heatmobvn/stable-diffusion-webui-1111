@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from packaging import version
 from helper.v2a_server import post_v2a
+from helper.hm import server_id
 
 import logging
 
@@ -344,7 +345,7 @@ def create_api(app):
     return api
 
 
-def api_only(google_id):
+def api_only():
     initialize()
 
     app = FastAPI()
@@ -362,12 +363,12 @@ def stop_route(request):
     return Response("Stopping.")
 
 
-def webui(google_id):
+def webui():
     launch_api = cmd_opts.api
     initialize()
 
     while 1:
-        post_v2a(google_id, "Webui loop start")
+        post_v2a(server_id, "Webui loop start")
         if shared.opts.clean_temp_dir_at_start:
             ui_tempdir.cleanup_tmpdr()
             startup_timer.record("cleanup temp dir")
@@ -413,8 +414,9 @@ def webui(google_id):
         # after initial launch, disable --autolaunch for subsequent restarts
         cmd_opts.autolaunch = False
 
-        post_v2a(google_id, "local_url: {}".format(local_url))
-        post_v2a(google_id, "share_url: {}".format(share_url))
+        post_v2a(server_id, "server_started")
+        if share_url:
+            post_v2a(server_id, "share_url: {}".format(share_url))
 
         startup_timer.record("gradio launch")
 

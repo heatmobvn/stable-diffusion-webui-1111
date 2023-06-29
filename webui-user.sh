@@ -3,6 +3,12 @@
 # Uncomment and change the variables below to your need:#
 #########################################################
 
+# Group: Majicmix, RevAnimated, Meinamix, RealisticVision, CosplayMix, ...
+ID=server_id
+GROUP=RevAnimated
+TYPE=''
+URL=''
+
 # Install directory without trailing slash
 install_dir="/workspace"
 
@@ -10,7 +16,7 @@ install_dir="/workspace"
 #clone_dir="stable-diffusion-webui"
 
 # Commandline arguments for webui.py, for example: export COMMANDLINE_ARGS="--medvram --opt-split-attention"
-export COMMANDLINE_ARGS="--opt-sdp-attention --port 3000 --listen --enable-insecure-extension-access --api --google-id hmstatic_<id> --group <>"
+export COMMANDLINE_ARGS="--opt-sdp-attention --port 3000 --listen --enable-insecure-extension-access --api --google-id $ID --group $GROUP --type $TYPE --share-url $URL"
 #export XFORMERS_PACKAGE="xformers==0.0.17.dev447"
 
 # python3 executable

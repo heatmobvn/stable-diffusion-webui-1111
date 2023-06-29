@@ -30,18 +30,6 @@ if os.environ.get('IGNORE_CMD_ARGS_ERRORS', None) is None:
 else:
     cmd_opts, _ = parser.parse_known_args()
 
-models_tbl = {
-    "Majicmix": "/workspace/stable-diffusion-webui/models/Stable-diffusion/majicmixRealistic_v5.safetensors",
-    "RealisticVision": "/workspace/stable-diffusion-webui/models/Stable-diffusion/realisticVisionV20_v20NoVAE.safetensors",
-    "RevAnimated": "/workspace/stable-diffusion-webui/models/Stable-diffusion/revAnimated_v122.safetensors",
-    "Meinamix": "/workspace/stable-diffusion-webui/models/Stable-diffusion/meinamix_meinaV10.safetensors",
-    "CosplayMix": "/workspace/stable-diffusion-webui/models/Stable-diffusion/cosplaymix_v41.safetensors",
-}
-
-if cmd_opts.group and cmd_opts.group in models_tbl.keys():
-    cmd_opts.ckpt = models_tbl[cmd_opts.group]
-    print('**** Model re-config:', cmd_opts.ckpt)
-
 restricted_opts = {
     "samples_filename_pattern",
     "directories_filename_pattern",
